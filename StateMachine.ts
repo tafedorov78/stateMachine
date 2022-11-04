@@ -11,7 +11,7 @@ export class StateMachine implements IStateMachine {
 
   constructor(model: any, stateEnum: object) {
     this.model = model;
-    this.currentState = null;
+    this.currentState = null as any;
     this.idsMap = new Map<string, string>();
     this.statesMap = new Map<string, BaseState>();
     this.currentStateName = "";
@@ -23,7 +23,7 @@ export class StateMachine implements IStateMachine {
   }
 
   addState(StatesEnum: any, id: string) {
-    let stateId: string = this.getStateId(id);
+    let stateId: string = this.getStateId(id) as string;
     if (this.idsMap.has(stateId)) {
       throw new Error("State already defined: " + stateId);
     }
@@ -43,11 +43,9 @@ export class StateMachine implements IStateMachine {
     if (this.currentState) {
       this.currentState.cleanUp();
     }
-    this.currentState = this.statesMap.get(id);
-    if (this.currentState.dispatchStateChange) {
-      this.currentStateName = this.idsMap.get(id);
-      this.stateChanged(this.idsMap.get(id), this.model);
-    }
+    this.currentState = this.statesMap.get(id) as BaseState;
+    this.currentStateName = this.idsMap.get(id) as string;
+    this.stateChanged(this.idsMap.get(id) as string, this.model);
     this.currentState.begin(data);
   }
 
